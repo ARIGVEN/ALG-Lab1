@@ -20,7 +20,6 @@ private:
 
     const std::string saveFileName = "savegame.txt";
 
-    // Вспомогательные функции
     int getUserInput(const std::string& prompt) {
         int value;
         while (true) {
@@ -42,8 +41,8 @@ private:
     void printStatus() {
         std::cout << "\nГод " << year << "\n";
         std::cout << "Население: " << population << "\n";
-        std::cout << "Пашни: " << acres << " акров\n";
-        std::cout << "Запасы зерна: " << bushels << " бушелей\n";
+        std::cout << "Земли: " << acres << " акров\n";
+        std::cout << "Запасы пшеницы: " << bushels << " бушелей\n";
         std::cout << "Стоимость земли: " << landPrice << " бушелей за акр\n\n";
     }
 
@@ -89,7 +88,6 @@ public:
     void play() override {
         std::cout << "Добро пожаловать в игру Хаммураби!\n";
 
-        
         if (saveExists()) {
             std::cout << "Обнаружена сохранённая игра.\n";
             std::cout << "Хотите продолжить или начать новую игру? (y/n): ";
@@ -108,7 +106,6 @@ public:
         for (; year <= max_years; ++year) {
             printStatus();
 
-           
             std::cout << "Хотите сохранить игру и выйти или продолжить(y/n): ";
             char saveChoice;
             std::cin >> saveChoice;
@@ -121,11 +118,8 @@ public:
                 
             }
 
-            
             landPrice = randomInRange(10, 30);
 
-
-          
             int landToBuy = getUserInput("Сколько акров земли хотите купить? ");
 
             while (landToBuy < 0) {
@@ -146,7 +140,6 @@ public:
                 landToBuy = getUserInput("Сколько акров земли хотите продать? ");
             }
 
-
             while (landToSell > acres) {
                 std::cout << "У вас нет столько земли для продажи.\n";
                 landToSell = getUserInput("Сколько акров земли хотите продать? ");
@@ -155,20 +148,18 @@ public:
             acres += landToBuy - landToSell;
             bushels -= landToBuy * landPrice;
             bushels += landToSell * landPrice;
-
-            
-            int food = getUserInput("Сколько бушелей зерна хотите потратить на еду? ");
+ 
+            int food = getUserInput("Сколько бушелей пшеницы хотите потратить на еду? ");
             while (food > bushels) {
-                std::cout << "Недостаточно зерна!\n";
-                food = getUserInput("Сколько бушелей зерна хотите потратить на еду? ");
+                std::cout << "Недостаточно пшеницы!\n";
+                food = getUserInput("Сколько бушелей пшеницы хотите потратить на еду? ");
             }
             bushels -= food;
 
-            
-            int seed = getUserInput("Сколько бушелей зерна хотите посеять? ");
+            int seed = getUserInput("Сколько бушелей пшеницы хотите посеять? ");
             while (seed > bushels) {
-                std::cout << "Недостаточно зерна для посева!\n";
-                seed = getUserInput("Сколько бушелей зерна хотите посеять? ");
+                std::cout << "Недостаточно пшеницы для посева!\n";
+                seed = getUserInput("Сколько бушелей пшеницы хотите посеять? ");
             }
             if (seed / 2 > population * acres) {
                 std::cout << "Недостаточно населения или земли для такого посева! Посев сокращён.\n";
@@ -182,7 +173,7 @@ public:
             if (starved > 0) {
                 std::cout << starved << " человек умерли от голода.\n";
             } else {
-                std::cout << "Голодом никто не умер.\n";
+                std::cout << "От голода никто не умер.\n";
             }
             population -= starved;
 
@@ -195,11 +186,11 @@ public:
             int harvestPerAcre = randomInRange(1, 6);
             int harvest = (seed / 2) * harvestPerAcre;
             bushels += harvest;
-            std::cout << "С урожая собрано " << harvest << " бушелей зерна (" << harvestPerAcre << " бушелей с акра).\n";
+            std::cout << "С урожая собрано " << harvest << " бушелей пшеницы (" << harvestPerAcre << " бушелей с акра).\n";
 
-            int ratsEat = (bushels > 0) ? randomInRange(0, bushels / 10) : 0;
+            int ratsEat = (bushels > 0) ? randomInRange(0, 7 * bushels / 100) : 0;
             bushels -= ratsEat;
-            std::cout << "Крысы съели " << ratsEat << " бушелей зерна.\n";
+            std::cout << "Крысы съели " << ratsEat << " бушелей пшеницы.\n";
 
             int immigrants = (bushels > 0) ? randomInRange(0, 10) : 0;
             population += immigrants;
@@ -207,7 +198,6 @@ public:
 
             std::cout << "Конец года " << year << ".\n\n";
         }
-
 
         if (year > max_years) {
             std::cout << "Игра завершена по окончании 10 лет.\n";
